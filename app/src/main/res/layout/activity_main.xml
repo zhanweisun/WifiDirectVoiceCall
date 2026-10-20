@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/txtStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="正在初始化…"
+            android:textSize="16sp"
+            android:textColor="@color/text_muted"
+            android:padding="12dp"
+            android:background="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnDiscover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="发现设备 (Discover)"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="附近的设备："
+            android:textStyle="bold"
+            android:textColor="@color/primary_dark"
+            android:layout_marginTop="16dp" />
+
+        <ListView
+            android:id="@+id/listPeers"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="8dp"
+            android:background="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/txtSelected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="未选中设备"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:paddingTop="8dp" />
+
+        <Button
+            android:id="@+id/btnConnect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="连接到选中设备"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btnCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始通话 (Call)"
+            android:visibility="visible"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btnHangup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="挂断 (Hang up)"
+            android:visibility="gone"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/txtPeers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_dark"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:textSize="16sp" />
+    </LinearLayout>
+</ScrollView>
