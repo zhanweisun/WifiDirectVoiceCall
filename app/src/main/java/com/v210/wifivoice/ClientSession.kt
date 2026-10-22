@@ -1,5 +1,6 @@
 package com.v210.wifivoice
 
+import android.annotation.SuppressLint
 import android.util.Log
 import java.io.IOException
 import java.net.InetSocketAddress
@@ -20,6 +21,7 @@ class ClientSession(private val stream: VoiceStream, private val host: String, p
     private var txCount = 0
     private var rxCount = 0
 
+    @SuppressLint("MissingPermission")
     fun start(onConnected: () -> Unit, onError: (String) -> Unit, onDisconnected: () -> Unit) {
         if (!running.compareAndSet(false, true)) return
 

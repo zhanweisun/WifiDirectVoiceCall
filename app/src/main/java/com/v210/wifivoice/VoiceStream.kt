@@ -1,8 +1,13 @@
 package com.v210.wifivoice
 
+import android.Manifest
+import android.media.AudioAttributes
+import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.AudioTrack
 import android.media.MediaRecorder
+import androidx.annotation.RequiresPermission
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -25,6 +30,7 @@ class VoiceStream {
     /** Buffer sufficient for a whole voice frame. */
     private var playbackBufferSize = 0
 
+    @RequiresPermission(Manifest.permission.RECORD_AUDIO)
     fun start(onPacket: (ByteArray) -> Unit) {
         if (!running.compareAndSet(false, true)) return
         this.onPacket = onPacket
@@ -61,18 +67,18 @@ class VoiceStream {
         }
 
         audioTrack = AudioTrack(
-            android.media.AudioAttributes.Builder()
-                .setUsage(android.media.AudioAttributes.USAGE_VOICE_COMMUNICATION)
-                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH)
+            AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                 .build(),
-            android.media.AudioFormat.Builder()
+            AudioFormat.Builder()
                 .setEncoding(AudioConfig.ENCODING)
                 .setSampleRate(AudioConfig.SAMPLE_RATE)
                 .setChannelMask(AudioConfig.CHANNEL_OUT)
                 .build(),
             playbackBufferSize,
             AudioTrack.MODE_STREAM,
-            android.media.AudioManager.AUDIO_SESSION_ID_GENERATE
+            AudioManager.AUDIO_SESSION_ID_GENERATE
         )
 
         audioRecord?.startRecording()

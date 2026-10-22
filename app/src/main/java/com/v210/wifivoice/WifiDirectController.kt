@@ -1,16 +1,18 @@
 package com.v210.wifivoice
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pDeviceList
 import android.net.wifi.p2p.WifiP2pInfo
 import android.net.wifi.WpsInfo
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Looper
+import androidx.annotation.RequiresPermission
+
 
 /**
  * Thin wrapper over the Android Wi-Fi Direct (P2P) framework. Handles device
@@ -50,6 +52,7 @@ class WifiDirectController(private val context: Context) : BroadcastReceiver() {
         runCatching { context.unregisterReceiver(this) }
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.NEARBY_WIFI_DEVICES])
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION -> {
@@ -66,7 +69,7 @@ class WifiDirectController(private val context: Context) : BroadcastReceiver() {
             }
         }
     }
-
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.NEARBY_WIFI_DEVICES])
     fun discoverPeers() {
         manager.discoverPeers(channel, object : WifiP2pManager.ActionListener {
             override fun onSuccess() {
@@ -84,14 +87,12 @@ class WifiDirectController(private val context: Context) : BroadcastReceiver() {
         })
     }
 
-    private fun requestPeers() {
-        manager.requestPeers(channel, object : WifiP2pManager.PeerListListener {
-            override fun onPeersAvailable(peers: WifiP2pDeviceList) {
-                listener?.onPeersChanged(peers.deviceList.toList())
-            }
-        })
-    }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.NEARBY_WIFI_DEVICES])
+    private fun requestPeers() {
+        manager.requestPeers(channel) { peers -> listener?.onPeersChanged(peers.deviceList.toList()) }
+    }
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.NEARBY_WIFI_DEVICES])
     fun connect(device: WifiP2pDevice) {
         val config = WifiP2pConfig().apply {
             deviceAddress = device.deviceAddress
@@ -110,11 +111,7 @@ class WifiDirectController(private val context: Context) : BroadcastReceiver() {
     }
 
     private fun requestConnectionInfo() {
-        manager.requestConnectionInfo(channel, object : WifiP2pManager.ConnectionInfoListener {
-            override fun onConnectionInfoAvailable(info: WifiP2pInfo) {
-                listener?.onConnectionInfo(info)
-            }
-        })
+        manager.requestConnectionInfo(channel) { info -> listener?.onConnectionInfo(info) }
     }
 
     fun removeGroup() {

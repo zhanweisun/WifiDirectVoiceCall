@@ -1,6 +1,7 @@
 package com.v210.wifivoice
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pInfo
@@ -102,6 +103,7 @@ class MainActivity : AppCompatActivity(), WifiDirectController.Listener {
         requestPermissions()
     }
 
+    @SuppressLint("MissingPermission")
     private fun setupUi() {
         peerAdapter = ArrayAdapter(this, R.layout.item_peer, mutableListOf())
         listPeers.adapter = peerAdapter
